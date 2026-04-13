@@ -1,51 +1,178 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montagu+Slab:opsz,wght@16..144,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-    <header class="navbar">
-        <h1 class="logo">Amber</h1>
-        <nav>
-            <a href="#">Home</a>
-            <a href="pages/about.html">About</a>
-            <a href="#">Projects</a>
-        </nav>
-    </header>
+<!-- NAVBAR -->
+<header class="navbar">
+  <!-- Left: Hamburger -->
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-    <!-- HERO -->
-    <section class="hero">
-        <h2>Hi, I'm Amber 👋</h2>
-        <p>ICT Student | Web Developer</p>
-        <button onclick="showMessage()">Get Started</button>
-    </section>
+  <!-- Center: Logo -->
+  <a href="/" class="logo-link navbar-logo">
+    <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
+  </a>
 
-    <!-- PROJECTS -->
-    <section class="projects">
-        <h2>My Projects</h2>
+  <!-- Right: Icons -->
+  <div class="nav-icons">
+    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+      <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
+    </a>
+    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+      <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
+    </a>
+    <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
+      <img src="image/icon/bag.svg" alt="Bag" class="nav-icon-img">
+    </a>
+  </div>
+</header>
 
-        <div class="card">
-            <h3>Library System</h3>
-            <p>A Java OOP project for managing books.</p>
-        </div>
+<!-- Slide-in Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawerNav">
+  <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
+  <a href="#">Home</a>
+  <a href="#">Products</a>
+  <a href="#">About</a>
+  <a href="#">Login</a>
+</nav>
 
-        <div class="card">
-            <h3>Talker App</h3>
-            <p>A communication-based project.</p>
-        </div>
-    </section>
+<script>
+  function toggleDrawer() {
+    document.getElementById('drawerNav').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+  }
+</script>
+<!-- HERO -->
+<section class="hero">
+  <img src="image/home/hero/hero_home.png" alt="Hero" class="hero-bg">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">New Arrival</p>
+    <h1 class="hero-title">Romantic<br>Summer Collection</h1>
+    <p class="hero-sub">Soft, feminine, and inspired by blooming nature</p>
+    <a href="#" class="hero-btn">Explore Now</a>
+  </div>
+</section>
 
-    <!-- FOOTER -->
-    <footer>
-        <p>© 2026 Amber</p>
-    </footer>
+<!-- SUBHERO -->
+<section class="subhero">
+  <img src="image/home/hero/subhero_home.png" alt="Subhero" class="subhero-img">
+  <div class="subhero-text">
+    <p>Everyday pieces,</p>
+    <p>made to bloom with you.</p>
+  </div>
+</section>
 
-    <script src="js/script.js"></script>
+<!-- FIND YOUR STYLE -->
+<section class="find-style">
+  <div class="find-style-left">
+    <h2 class="find-style-title">Find your style</h2>
+    <p class="find-style-sub">Discover pieces made for your mood and movement.</p>
+  </div>
+  <div class="find-style-grid">
+    <div class="style-card">
+      <img src="image/home/find_your_style/home_top.png" alt="Tops" class="style-card-img">
+      <span class="style-card-label">Tops</span>
+    </div>
+    <div class="style-card">
+      <img src="image/home/find_your_style/home_bottoms.png" alt="Bottoms" class="style-card-img">
+      <span class="style-card-label">Bottoms</span>
+    </div>
+    <div class="style-card">
+      <img src="image/home/find_your_style/home_swimwear.png" alt="Swimwear" class="style-card-img">
+      <span class="style-card-label">Swimwear</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products">
+  <h2>Our Products</h2>
+
+  <div class="grid">
+
+    <a href="product-detail.html?id=betty" class="card">
+      <img src="image/home/our_product/swim_betty_home.png" alt="Swim Betty">
+      <div class="card-text">
+        <h3>Betty two-piece swimsuit</h3>
+        <p>2,590.00 THB</p>
+      </div>
+    </a>
+
+    <a href="product-detail.html?id=kittenny" class="card">
+      <img src="image/home/our_product/swim_kittenny_home.png" alt="Swim Kittenny">
+      <div class="card-text">
+        <h3>Kitteny one piece swimsuit</h3>
+        <p>1,990.00 THB</p>
+      </div>
+    </a>
+
+    <a href="product-detail.html?id=lolita" class="card">
+      <img src="image/home/our_product/swim_lolita_home.png" alt="Swim Lolita">
+      <div class="card-text">
+        <h3>Lolita Ruffle one piece swimsuit</h3>
+        <p>2,590.00 THB</p>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-banner">
+  <div class="about-banner-left">
+    <img src="image/home/heart.png" alt="Fleur hearts" class="about-heart-img">
+  </div>
+  <div class="about-banner-right">
+    <h2 class="about-title">About Us</h2>
+    <p class="about-quote">"Fleur is for the dreamers. We blend effortless style with the soul of the shore. Designed to celebrate your natural glow in every sun-kissed moment. Wear the bloom, live the peace."</p>
+    <a href="#" class="about-btn">Learn more</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <!-- Left: Logo + copyright -->
+    <div class="footer-col footer-brand">
+      <img src="image/icon/logo_footer.svg" alt="Fleur" class="footer-logo">
+      <p class="footer-copy">© 2026 Fleur</p>
+    </div>
+
+    <!-- Middle: Product links -->
+    <div class="footer-col">
+      <a href="#">All products</a>
+      <a href="#">Tops</a>
+      <a href="#">Bottoms</a>
+      <a href="#">Swimsuits</a>
+    </div>
+
+    <!-- Right: Info links -->
+    <div class="footer-col">
+      <a href="#">Size Guide</a>
+      <a href="team.html">Our Team</a>
+      <a href="login.html">Admin Login</a>
+    </div>
+
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
 </body>
 </html>

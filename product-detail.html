@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product – Fleur</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montagu+Slab:opsz,wght@16..144,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="homepage.html" class="logo-link navbar-logo">
+    <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
+  </a>
+  <div class="nav-icons">
+    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+      <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
+    </a>
+    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+      <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
+    </a>
+    <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
+      <img src="image/icon/bag.svg" alt="Bag" class="nav-icon-img">
+    </a>
+  </div>
+</header>
+
+<!-- Slide-in Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawerNav">
+  <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
+  <a href="homepage.html">Home</a>
+  <a href="product.html">Products</a>
+  <a href="#">About</a>
+  <a href="#">Login</a>
+</nav>
+
+<script>
+  function toggleDrawer() {
+    document.getElementById('drawerNav').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+  }
+</script>
+
+<!-- PRODUCT DETAIL -->
+<main class="pd-page">
+
+  <!-- Breadcrumb -->
+  <nav class="pd-breadcrumb">
+    <a href="homepage.html">Home</a>
+    <span>›</span>
+    <a href="product.html">Products</a>
+    <span>›</span>
+    <span id="pd-breadcrumb-name">Product</span>
+  </nav>
+
+  <div class="pd-layout">
+
+    <!-- LEFT: Image gallery -->
+    <div class="pd-gallery">
+      <div class="pd-main-img-wrap">
+        <img id="pd-main-img" src="" alt="Product" class="pd-main-img">
+      </div>
+      <div class="pd-thumbnails" id="pd-thumbs"></div>
+    </div>
+
+    <!-- RIGHT: Product info -->
+    <div class="pd-info">
+      <h1 class="pd-name" id="pd-name">—</h1>
+      <p class="pd-price" id="pd-price">—</p>
+
+      <!-- Color -->
+      <div class="pd-section">
+        <p class="pd-label">Color</p>
+        <div class="pd-colors" id="pd-colors"></div>
+      </div>
+
+      <!-- Size -->
+      <div class="pd-section">
+        <p class="pd-label">Size</p>
+        <div class="pd-sizes" id="pd-sizes"></div>
+      </div>
+
+      <!-- Description -->
+      <div class="pd-section">
+        <p class="pd-label">Details</p>
+        <p class="pd-desc" id="pd-desc">—</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="pd-actions">
+        <button class="pd-add-btn">Add to Bag</button>
+        <button class="pd-wish-btn" aria-label="Wishlist">
+          <img src="image/home/heart.png" alt="♡" style="width:28px;height:28px;object-fit:contain;">
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <img src="image/icon/logo_footer.svg" alt="Fleur" class="footer-logo">
+      <p class="footer-copy">© 2026 Fleur</p>
+    </div>
+    <div class="footer-col">
+      <a href="#">All products</a>
+      <a href="#">Tops</a>
+      <a href="#">Bottoms</a>
+      <a href="#">Swimsuits</a>
+    </div>
+    <div class="footer-col">
+      <a href="#">Size Guide</a>
+      <a href="team.html">Our Team</a>
+      <a href="login.html">Admin Login</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Product database ─────────────────────────────── */
+const PRODUCTS = {
+  betty: {
+    name:   "Betty two-piece swimsuit",
+    price:  "2,590.00 THB",
+    desc:   "A dreamy two-piece set in soft plaid mesh with delicate ric-rac trim and a rosette detail. Perfect for the romantic at heart.",
+    colors: [
+      { label: "Purple", swatch: "image/productDetail/color/purple.png" },
+      { label: "Navy",   swatch: "image/productDetail/color/navy.png"   },
+    ],
+    sizes:  ["XS", "S", "M", "L"],
+    images: [
+      "image/productDetail/swim_betty_detail.png",
+      "image/productDetail/model/model_1.png",
+      "image/productDetail/model/model_2.png",
+      "image/productDetail/model/model_3.png",
+      "image/productDetail/model/model_4.png",
+    ],
+  },
+  kittenny: {
+    name:   "Kitteny one piece swimsuit",
+    price:  "1,990.00 THB",
+    desc:   "A sleek pink one-piece with a delicate cut-out at the bust for a modern, feminine silhouette.",
+    colors: [{ label: "Pink", swatch: "" }],
+    sizes:  ["XS", "S", "M", "L"],
+    images: ["image/home/our_product/swim_kittenny_home.png"],
+  },
+  lolita: {
+    name:   "Lolita Ruffle one piece swimsuit",
+    price:  "2,590.00 THB",
+    desc:   "White with vibrant cherry and heart embroidery and soft ruffle straps. A playful, romantic statement piece.",
+    colors: [{ label: "White", swatch: "" }],
+    sizes:  ["XS", "S", "M", "L"],
+    images: ["image/home/our_product/swim_lolita_home.png"],
+  },
+  balconette: {
+    name:   "Balconette one piece swimsuit",
+    price:  "2,190.00 THB",
+    desc:   "A candy-striped balconette one-piece in blush pink. Structured cups and a smooth finish for beach-to-pool wear.",
+    colors: [{ label: "Pink", swatch: "" }],
+    sizes:  ["XS", "S", "M", "L"],
+    images: ["image/allProduct&SearchPage/swim_balconette.png"],
+  },
+  lila: {
+    name:   "Lila mini dress",
+    price:  "2,390.00 THB",
+    desc:   "A breezy white mini dress with puff sleeves, a squareneck and eyelet trim hem. Effortlessly romantic.",
+    colors: [{ label: "White", swatch: "" }],
+    sizes:  ["XS", "S", "M", "L"],
+    images: ["image/allProduct&SearchPage/dress_lila.png"],
+  },
+  camellia: {
+    name:   "Camellia top",
+    price:  "1,590.00 THB",
+    desc:   "A structured white corset top inspired by the camellia bloom. Style with anything from denim to swimwear.",
+    colors: [{ label: "White", swatch: "" }],
+    sizes:  ["XS", "S", "M", "L"],
+    images: ["image/allProduct&SearchPage/top_camellia.png"],
+  },
+  lily: {
+    name:   "Lily floral sweater",
+    price:  "2,990.00 THB",
+    desc:   "An oversized knit sweater with a watercolour lily print on a warm oatmeal base. Cosy and statement-making.",
+    colors: [{ label: "Beige", swatch: "" }],
+    sizes:  ["XS", "S", "M", "L", "XL"],
+    images: ["image/allProduct&SearchPage/sweater_lily.png"],
+  },
+};
+
+/* ── Render page ──────────────────────────────────── */
+const id = new URLSearchParams(window.location.search).get('id') || 'betty';
+const p  = PRODUCTS[id] || PRODUCTS['betty'];
+
+// Meta & breadcrumb
+document.title = p.name + ' – Fleur';
+document.getElementById('pd-breadcrumb-name').textContent = p.name;
+document.getElementById('pd-name').textContent  = p.name;
+document.getElementById('pd-price').textContent = p.price;
+document.getElementById('pd-desc').textContent  = p.desc;
+
+// Main image
+const mainImg = document.getElementById('pd-main-img');
+mainImg.src = p.images[0];
+mainImg.alt = p.name;
+
+// Thumbnails
+const thumbsEl = document.getElementById('pd-thumbs');
+p.images.forEach((src, i) => {
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = p.name + ' ' + (i + 1);
+  img.className = 'pd-thumb' + (i === 0 ? ' active' : '');
+  img.onclick = () => {
+    mainImg.src = src;
+    document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
+    img.classList.add('active');
+  };
+  thumbsEl.appendChild(img);
+});
+
+// Colors
+const colorsEl = document.getElementById('pd-colors');
+p.colors.forEach((c, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'pd-color-btn' + (i === 0 ? ' active' : '');
+  btn.title = c.label;
+  if (c.swatch) {
+    const sw = document.createElement('img');
+    sw.src = c.swatch;
+    sw.alt = c.label;
+    btn.appendChild(sw);
+  } else {
+    btn.textContent = c.label;
+    btn.style.fontSize = '12px';
+  }
+  btn.onclick = () => {
+    document.querySelectorAll('.pd-color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  };
+  colorsEl.appendChild(btn);
+});
+
+// Sizes
+const sizesEl = document.getElementById('pd-sizes');
+p.sizes.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'pd-size-btn' + (i === 0 ? ' active' : '');
+  btn.textContent = s;
+  btn.onclick = () => {
+    document.querySelectorAll('.pd-size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  };
+  sizesEl.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Management – Fleur</title>
+  <meta name="description" content="Admin product management for Fleur.">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montagu+Slab:opsz,wght@16..144,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── PRODUCT MANAGEMENT ─────────────────── */
+    .pm-page {
+      min-height: 70vh;
+      background: #E9E2D7;
+      padding: 40px 32px 80px;
+    }
+
+    /* Top bar */
+    .pm-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pm-title {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #AC040D;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+
+    .pm-add-btn {
+      background: #AC040D;
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      letter-spacing: 0.4px;
+      transition: background 0.2s;
+    }
+    .pm-add-btn:hover { background: #8a0309; }
+
+    /* Search bar */
+    .pm-search-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .pm-search-select {
+      padding: 8px 28px 8px 10px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 13px;
+      border: 1px solid #bbb;
+      background: #E9E2D7;
+      color: #444;
+      cursor: pointer;
+      border-radius: 4px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+    }
+
+    .pm-search-input-wrap {
+      display: flex;
+      align-items: center;
+      border: 1px solid #bbb;
+      background: #E9E2D7;
+      padding: 7px 12px;
+      gap: 6px;
+      border-radius: 4px;
+      flex: 1;
+      max-width: 280px;
+    }
+    .pm-search-input-wrap svg { flex-shrink: 0; color: #aaa; }
+    .pm-search-input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 13px;
+      color: #333;
+      width: 100%;
+    }
+    .pm-search-input::placeholder { color: #bbb; }
+
+    /* Table */
+    .pm-table-wrap {
+      border: 1px solid #c8bfb5;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .pm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Montagu Slab', Georgia, serif;
+    }
+
+    .pm-table thead tr {
+      background: #AC040D;
+      color: #fff;
+    }
+    .pm-table thead th {
+      padding: 14px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+      letter-spacing: 0.3px;
+    }
+    .pm-table thead th:first-child { padding-left: 16px; }
+
+    .pm-table tbody tr {
+      border-bottom: 1px solid #d4c9be;
+      background: #E9E2D7;
+      vertical-align: top;
+    }
+    .pm-table tbody tr:last-child { border-bottom: none; }
+
+    .pm-table tbody td {
+      padding: 16px 10px;
+      font-size: 13px;
+      color: #333;
+    }
+    .pm-table tbody td:first-child { padding-left: 16px; }
+
+    .pm-product-img {
+      width: 64px;
+      height: 80px;
+      object-fit: contain;
+      display: block;
+      background: #fff;
+      border-radius: 4px;
+      padding: 4px;
+    }
+
+    .pm-product-name {
+      font-weight: 600;
+      color: #222;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .pm-category { color: #AC040D; }
+
+    /* Action cell */
+    .pm-actions-cell {
+      text-align: right;
+      padding-right: 16px;
+      vertical-align: bottom;
+      padding-bottom: 14px;
+    }
+
+    .pm-row-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .pm-icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: #AC040D;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    .pm-icon-btn:hover { opacity: 0.65; }
+    .pm-icon-btn svg { width: 18px; height: 18px; }
+
+    /* Add / Edit Modal */
+    .pm-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    .pm-modal-overlay.open { display: flex; }
+
+    .pm-modal {
+      background: #E9E2D7;
+      border-radius: 12px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .pm-modal h2 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #AC040D;
+      letter-spacing: 1px;
+    }
+    .pm-modal label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #999;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .pm-modal input,
+    .pm-modal select {
+      width: 100%;
+      box-sizing: border-box;
+      background: #fff;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      color: #333;
+      outline: none;
+    }
+    .pm-modal input:focus,
+    .pm-modal select:focus { border-color: #AC040D; }
+
+    .pm-modal-row { display: flex; gap: 12px; }
+    .pm-modal-row > div { flex: 1; }
+
+    .pm-modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    .pm-modal-cancel {
+      padding: 10px 24px;
+      background: none;
+      border: 1.5px solid #bbb;
+      border-radius: 6px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      cursor: pointer;
+      color: #555;
+    }
+    .pm-modal-save {
+      padding: 10px 28px;
+      background: #AC040D;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .pm-modal-save:hover { background: #8a0309; }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="homepage.html" class="logo-link navbar-logo">
+    <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
+  </a>
+  <div class="nav-icons">
+    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+      <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
+    </a>
+    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+      <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
+    </a>
+    <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
+      <img src="image/icon/bag.svg" alt="Bag" class="nav-icon-img">
+    </a>
+  </div>
+</header>
+
+<!-- Slide-in Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawerNav">
+  <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
+  <a href="homepage.html">Home</a>
+  <a href="product.html">Products</a>
+  <a href="#">About</a>
+  <a href="login.html">Login</a>
+</nav>
+
+<!-- PRODUCT MANAGEMENT -->
+<div class="pm-page">
+
+  <!-- Top bar -->
+  <div class="pm-topbar">
+    <h1 class="pm-title">Product Management</h1>
+    <button class="pm-add-btn" onclick="window.location.href='add-product.html'">+ Add New Product</button>
+  </div>
+
+  <!-- Search row -->
+  <div class="pm-search-row">
+    <select class="pm-search-select" id="searchBySelect">
+      <option value="name">Search by</option>
+      <option value="name">Product Name</option>
+      <option value="id">Product ID</option>
+      <option value="category">Category</option>
+    </select>
+    <div class="pm-search-input-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="pm-search-input" id="searchInput" placeholder="search" oninput="filterTable()">
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="pm-table-wrap">
+    <table class="pm-table" id="productTable">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Product Name</th>
+          <th>Product ID</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Color</th>
+          <th>Size</th>
+          <th>Stock</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="pm-modal-overlay" id="modalOverlay">
+  <div class="pm-modal">
+    <h2 id="modalTitle">Add New Product</h2>
+
+    <div>
+      <label>Product Name</label>
+      <input type="text" id="mName" placeholder="e.g. Betty two-piece swimsuit">
+    </div>
+
+    <div class="pm-modal-row">
+      <div>
+        <label>Product ID</label>
+        <input type="text" id="mId" placeholder="e.g. FL-SW-001">
+      </div>
+      <div>
+        <label>Category</label>
+        <select id="mCategory">
+          <option value="Swimsuits">Swimsuits</option>
+          <option value="Tops">Tops</option>
+          <option value="Bottoms">Bottoms</option>
+          <option value="Dresses">Dresses</option>
+          <option value="Sweaters">Sweaters</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pm-modal-row">
+      <div>
+        <label>Price (THB)</label>
+        <input type="number" id="mPrice" placeholder="2590">
+      </div>
+      <div>
+        <label>Color</label>
+        <input type="text" id="mColor" placeholder="e.g. Purple">
+      </div>
+    </div>
+
+    <div class="pm-modal-row">
+      <div>
+        <label>Size</label>
+        <select id="mSize">
+          <option>XS</option><option>S</option><option selected>M</option><option>L</option><option>XL</option>
+        </select>
+      </div>
+      <div>
+        <label>Stock</label>
+        <input type="number" id="mStock" placeholder="0">
+      </div>
+    </div>
+
+    <div>
+      <label>Image URL</label>
+      <input type="text" id="mImg" placeholder="image/home/our_product/...">
+    </div>
+
+    <div class="pm-modal-actions">
+      <button class="pm-modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="pm-modal-save" onclick="saveProduct()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <img src="image/icon/logo_footer.svg" alt="Fleur" class="footer-logo">
+      <p class="footer-copy">© 2026 Fleur</p>
+    </div>
+    <div class="footer-col">
+      <a href="product.html">All products</a>
+      <a href="#">Tops</a>
+      <a href="#">Bottoms</a>
+      <a href="#">Swimsuits</a>
+    </div>
+    <div class="footer-col">
+      <a href="#">Size Guide</a>
+      <a href="team.html">Our Team</a>
+      <a href="login.html">Admin Login</a>
+    </div>
+  </div>
+</footer>
+
+<script src="api.js"></script>
+<script>
+  function toggleDrawer() {
+    document.getElementById('drawerNav').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+  }
+
+  /* ── Product data (MySQL via API) ─── */
+  const DEFAULT_PRODUCTS = [
+    { id:'FL-SW-001', name:'Betty two-piece swimsuit',   category:'Swimsuits', price:'2,590.00', color:'Purple', size:'S', stock:12, img:'image/productDetail/swim_betty_detail.png' },
+    { id:'FL-SW-002', name:'Betty two-piece swimsuit',   category:'Swimsuits', price:'2,590.00', color:'Purple', size:'M', stock:4,  img:'image/productDetail/swim_betty_detail.png' },
+    { id:'FL-SW-003', name:'Betty two-piece swimsuit',   category:'Swimsuits', price:'2,590.00', color:'Navy',   size:'S', stock:14, img:'image/productDetail/swim_betty_detail.png' },
+    { id:'FL-SW-004', name:'Betty two-piece swimsuit',   category:'Swimsuits', price:'2,590.00', color:'Navy',   size:'M', stock:5,  img:'image/productDetail/swim_betty_detail.png' },
+    { id:'FL-SW-005', name:'Kitteny one piece swimsuit', category:'Swimsuits', price:'1,990.00', color:'Pink',   size:'S', stock:8,  img:'image/home/our_product/swim_kittenny_home.png' },
+    { id:'FL-SW-006', name:'Kitteny one piece swimsuit', category:'Swimsuits', price:'1,990.00', color:'Pink',   size:'M', stock:6,  img:'image/home/our_product/swim_kittenny_home.png' },
+    { id:'FL-SW-007', name:'Lolita Ruffle one piece',    category:'Swimsuits', price:'2,590.00', color:'White',  size:'S', stock:10, img:'image/home/our_product/swim_lolita_home.png' },
+    { id:'FL-DR-001', name:'Lila mini dress',            category:'Dresses',   price:'2,390.00', color:'White',  size:'M', stock:7,  img:'image/allProduct&SearchPage/dress_lila.png' },
+    { id:'FL-TP-001', name:'Camellia top',               category:'Tops',      price:'1,590.00', color:'White',  size:'S', stock:15, img:'image/allProduct&SearchPage/top_camellia.png' },
+    { id:'FL-SW-008', name:'Lily floral sweater',        category:'Sweaters',  price:'2,990.00', color:'Beige',  size:'M', stock:3,  img:'image/allProduct&SearchPage/sweater_lily.png' },
+  ];
+
+  let products = [];
+  let editRowId = null; // MySQL row id of the product being edited
+
+  /* ── Render table ─────────────────────── */
+  function renderTable(list) {
+    const tbody = document.getElementById('tableBody');
+    if (!list) list = products;
+    tbody.innerHTML = list.map(p => `
+      <tr>
+        <td><img src="${p.img}" alt="${p.name}" class="pm-product-img"></td>
+        <td><div class="pm-product-name">${p.name}</div></td>
+        <td>${p.product_id}</td>
+        <td class="pm-category">${p.category}</td>
+        <td>${p.price}</td>
+        <td>${p.color}</td>
+        <td>${p.size}</td>
+        <td>${p.stock}</td>
+        <td class="pm-actions-cell">
+          <div class="pm-row-actions">
+            <button class="pm-icon-btn" title="Edit" onclick="window.location.href='edit-product.html?id=${p.id}'">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+            <button class="pm-icon-btn" title="Delete" onclick="deleteProduct(${p.id}, '${p.name.replace(/'/g,"\\'")}}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6"/><path d="M14 11v6"/>
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  /* ── Search / filter ──────────────────── */
+  function filterTable() {
+    const q  = document.getElementById('searchInput').value.toLowerCase();
+    const by = document.getElementById('searchBySelect').value;
+    const filtered = products.filter(p => {
+      if (by === 'id')       return (p.product_id || '').toLowerCase().includes(q);
+      if (by === 'category') return (p.category   || '').toLowerCase().includes(q);
+      return (p.name || '').toLowerCase().includes(q);
+    });
+    renderTable(filtered);
+  }
+
+  /* ── Quick-Edit Modal (inline in management page) ── */
+  function openModal(rowId) {
+    editRowId = rowId || null;
+    const p = rowId ? products.find(x => x.id === rowId) : {};
+    document.getElementById('modalTitle').textContent = editRowId ? 'Edit Product' : 'Add New Product';
+    document.getElementById('mName').value     = p.name       || '';
+    document.getElementById('mId').value       = p.product_id || '';
+    document.getElementById('mCategory').value = p.category   || 'Swimsuits';
+    document.getElementById('mPrice').value    = p.price ? String(p.price).replace(/,/g,'') : '';
+    document.getElementById('mColor').value    = p.color      || '';
+    document.getElementById('mSize').value     = p.size       || 'M';
+    document.getElementById('mStock').value    = p.stock      || '';
+    document.getElementById('mImg').value      = p.img        || '';
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    editRowId = null;
+  }
+
+  async function saveProduct() {
+    const raw = Number(String(document.getElementById('mPrice').value).replace(/,/g,'')) || 0;
+    const entry = {
+      name:        document.getElementById('mName').value.trim()  || 'Unnamed',
+      product_id:  document.getElementById('mId').value.trim()    || 'FL-XX-000',
+      category:    document.getElementById('mCategory').value,
+      price:       raw.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}),
+      color:       document.getElementById('mColor').value.trim() || '—',
+      size:        document.getElementById('mSize').value,
+      stock:       Number(document.getElementById('mStock').value) || 0,
+      img:         document.getElementById('mImg').value.trim()   || '',
+      description: '',
+    };
+    try {
+      if (editRowId) {
+        await FleurAPI.updateProduct(editRowId, entry);
+      } else {
+        await FleurAPI.addProduct(entry);
+      }
+      closeModal();
+      await loadAndRender();
+    } catch (err) {
+      alert('Error saving product: ' + err.message);
+    }
+  }
+
+  async function deleteProduct(id, name) {
+    if (confirm(`Delete "${name}"?`)) {
+      try {
+        await FleurAPI.deleteProduct(id);
+        await loadAndRender();
+      } catch (err) {
+        alert('Error deleting product: ' + err.message);
+      }
+    }
+  }
+
+  /* ── Load from MySQL and render ──────── */
+  async function loadAndRender() {
+    try {
+      products = await FleurAPI.getProducts();
+      renderTable();
+    } catch (err) {
+      document.getElementById('tableBody').innerHTML =
+        `<tr><td colspan="9" style="text-align:center;color:#AC040D;padding:24px">
+          ⚠️ Cannot connect to API server.<br>
+          <small>Make sure the backend is running: <code>cd backend && node server.js</code></small>
+        </td></tr>`;
+    }
+  }
+
+  // Close modal on overlay click
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Init
+  loadAndRender();
+</script>
+
+</body>
+</html>

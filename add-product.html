@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create New Product – Fleur</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montagu+Slab:opsz,wght@16..144,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── ADD PRODUCT PAGE ──────────────────── */
+    .ap-page {
+      min-height: 70vh;
+      background: #E9E2D7;
+      padding: 28px 32px 80px;
+    }
+
+    /* Breadcrumb */
+    .ap-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 20px;
+      font-family: 'Montagu Slab', Georgia, serif;
+    }
+    .ap-breadcrumb a { color: #888; text-decoration: none; }
+    .ap-breadcrumb a:hover { color: #AC040D; }
+    .ap-breadcrumb span { color: #bbb; }
+
+    /* Page title */
+    .ap-title {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #AC040D;
+      letter-spacing: 0.5px;
+      margin: 0 0 24px;
+    }
+
+    /* Card */
+    .ap-card {
+      border: 1.5px solid #AC040D;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .ap-card-header {
+      background: #AC040D;
+      padding: 16px 24px;
+    }
+    .ap-card-header h2 {
+      margin: 0;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      font-style: italic;
+      letter-spacing: 0.3px;
+    }
+
+    .ap-card-body {
+      background: #E9E2D7;
+      padding: 28px 24px 32px;
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+    }
+
+    /* ── Left: image upload ─────────────── */
+    .ap-left {
+      flex-shrink: 0;
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .ap-upload-zone {
+      width: 100%;
+      aspect-ratio: 1;
+      border: 2px dashed #AC040D;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+    .ap-upload-zone:hover { background: rgba(172,4,13,0.04); }
+
+    .ap-upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .ap-upload-plus {
+      width: 36px;
+      height: 36px;
+      border: 2px solid #AC040D;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #AC040D;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 300;
+    }
+
+    .ap-upload-text {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 12px;
+      color: #AC040D;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .ap-upload-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+      position: absolute;
+      inset: 0;
+    }
+
+    /* Image preview strip */
+    .ap-preview-label {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .ap-preview-strip {
+      display: flex;
+      gap: 8px;
+    }
+
+    .ap-preview-thumb {
+      width: 52px;
+      height: 52px;
+      background: #d4ccc4;
+      border-radius: 4px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .ap-preview-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* ── Right: form ───────────────────── */
+    .ap-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ap-field {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ap-field label {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #AC040D;
+      width: 130px;
+      flex-shrink: 0;
+    }
+
+    .ap-field input,
+    .ap-field select,
+    .ap-field textarea {
+      flex: 1;
+      background: #E9E2D7;
+      border: 1.5px solid #AC040D;
+      border-radius: 4px;
+      padding: 9px 12px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 13px;
+      color: #333;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .ap-field input:focus,
+    .ap-field select:focus,
+    .ap-field textarea:focus { border-color: #7a1118; }
+    .ap-field input::placeholder,
+    .ap-field textarea::placeholder { color: #bbb; }
+
+    .ap-field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23AC040D' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+    }
+
+    .ap-field textarea {
+      resize: vertical;
+      min-height: 90px;
+      align-self: flex-start;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Align description label to top */
+    .ap-field--top { align-items: flex-start; }
+    .ap-field--top label { padding-top: 10px; }
+
+    /* Actions */
+    .ap-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .ap-cancel-btn {
+      padding: 10px 28px;
+      background: transparent;
+      border: 1.5px solid #AC040D;
+      border-radius: 4px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      color: #AC040D;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .ap-cancel-btn:hover { background: rgba(172,4,13,0.06); }
+
+    .ap-save-btn {
+      padding: 10px 32px;
+      background: #AC040D;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .ap-save-btn:hover { background: #8a0309; }
+
+    /* ── Confirmation Modal ─────────────── */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .confirm-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .confirm-box {
+      background: #E9E2D7;
+      border-radius: 10px;
+      padding: 36px 48px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      transform: scale(0.93);
+      transition: transform 0.2s;
+      min-width: 280px;
+    }
+    .confirm-overlay.open .confirm-box {
+      transform: scale(1);
+    }
+    .confirm-msg {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: #222;
+      margin: 0 0 28px;
+      line-height: 1.5;
+    }
+    .confirm-btns {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    .confirm-yes-btn {
+      padding: 9px 32px;
+      background: transparent;
+      border: 1.5px solid #333;
+      border-radius: 6px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #222;
+      cursor: pointer;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .confirm-yes-btn:hover { background: rgba(0,0,0,0.06); }
+    .confirm-no-btn {
+      padding: 9px 32px;
+      background: transparent;
+      border: 1.5px solid #AC040D;
+      border-radius: 6px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #AC040D;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .confirm-no-btn:hover { background: rgba(172,4,13,0.07); }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="homepage.html" class="logo-link navbar-logo">
+    <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
+  </a>
+  <div class="nav-icons">
+    <button class="nav-icon-btn" aria-label="Search"><img src="image/icon/search.svg" alt="Search" class="nav-icon-img"></button>
+    <button class="nav-icon-btn" aria-label="Login"><img src="image/icon/login.svg" alt="Login" class="nav-icon-img"></button>
+    <button class="nav-icon-btn" aria-label="Bag"><img src="image/icon/bag.svg" alt="Bag" class="nav-icon-img"></button>
+  </div>
+</header>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawerNav">
+  <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close">✕</button>
+  <a href="homepage.html">Home</a>
+  <a href="product.html">Products</a>
+  <a href="#">About</a>
+  <a href="login.html">Login</a>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="ap-page">
+
+  <!-- Breadcrumb -->
+  <nav class="ap-breadcrumb">
+    <a href="login.html">Admin</a>
+    <span>›</span>
+    <a href="product-management.html">Product Management</a>
+    <span>›</span>
+    <span>Create New Product</span>
+  </nav>
+
+  <h1 class="ap-title">Create New Product</h1>
+
+  <div class="ap-card">
+    <div class="ap-card-header">
+      <h2>Product's Information</h2>
+    </div>
+
+    <div class="ap-card-body">
+
+      <!-- LEFT: upload + preview -->
+      <div class="ap-left">
+        <div class="ap-upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+          <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFiles(this.files)">
+          <div class="ap-upload-plus">+</div>
+          <p class="ap-upload-text">Drag or click to upload<br>photo</p>
+          <img class="ap-upload-preview" id="mainPreview" alt="Preview">
+        </div>
+
+        <div>
+          <p class="ap-preview-label">Image Preview</p>
+          <div class="ap-preview-strip" id="previewStrip">
+            <div class="ap-preview-thumb"><img id="th0" alt=""></div>
+            <div class="ap-preview-thumb"><img id="th1" alt=""></div>
+            <div class="ap-preview-thumb"><img id="th2" alt=""></div>
+            <div class="ap-preview-thumb"><img id="th3" alt=""></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: form fields -->
+      <div class="ap-right">
+
+        <div class="ap-field">
+          <label for="pName">Product name</label>
+          <input type="text" id="pName" placeholder="">
+        </div>
+
+        <div class="ap-field">
+          <label for="pId">Product ID</label>
+          <input type="text" id="pId" placeholder="e.g. FL-SW-001">
+        </div>
+
+        <div class="ap-field">
+          <label for="pCategory">Category</label>
+          <select id="pCategory">
+            <option value="" disabled selected></option>
+            <option value="Swimsuits">Swimsuits</option>
+            <option value="Tops">Tops</option>
+            <option value="Bottoms">Bottoms</option>
+            <option value="Dresses">Dresses</option>
+            <option value="Sweaters">Sweaters</option>
+          </select>
+        </div>
+
+        <div class="ap-field">
+          <label for="pPrice">Price</label>
+          <input type="number" id="pPrice" placeholder="">
+        </div>
+
+        <div class="ap-field">
+          <label for="pColor">Color</label>
+          <select id="pColor">
+            <option value="" disabled selected></option>
+            <option>Purple</option>
+            <option>Navy</option>
+            <option>Pink</option>
+            <option>White</option>
+            <option>Beige</option>
+            <option>Black</option>
+            <option>Red</option>
+          </select>
+        </div>
+
+        <div class="ap-field">
+          <label for="pSize">Size</label>
+          <select id="pSize">
+            <option value="" disabled selected></option>
+            <option>XS</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+          </select>
+        </div>
+
+        <div class="ap-field">
+          <label for="pStock">Stock</label>
+          <input type="number" id="pStock" placeholder="e.g. 10">
+        </div>
+
+        <div class="ap-field ap-field--top">
+          <label for="pDesc">Description</label>
+          <textarea id="pDesc" placeholder=""></textarea>
+        </div>
+
+        <div class="ap-actions">
+          <button class="ap-cancel-btn" onclick="history.length > 1 ? history.back() : window.location='product-management.html'">Cancel</button>
+          <button class="ap-save-btn" onclick="saveProduct()">Save</button>
+        </div>
+
+      </div><!-- /.ap-right -->
+    </div><!-- /.ap-card-body -->
+  </div><!-- /.ap-card -->
+
+</div><!-- /.ap-page -->
+
+<!-- Save Confirmation Modal -->
+<div class="confirm-overlay" id="saveModal">
+  <div class="confirm-box">
+    <p class="confirm-msg">Do you want to save this product ?</p>
+    <div class="confirm-btns">
+      <button class="confirm-yes-btn" id="confirmYesBtn">Yes</button>
+      <button class="confirm-no-btn" onclick="closeModal()">No</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <img src="image/icon/logo_footer.svg" alt="Fleur" class="footer-logo">
+      <p class="footer-copy">© 2026 Fleur</p>
+    </div>
+    <div class="footer-col">
+      <a href="product.html">All products</a>
+      <a href="#">Tops</a>
+      <a href="#">Bottoms</a>
+      <a href="#">Swimsuits</a>
+    </div>
+    <div class="footer-col">
+      <a href="#">Size Guide</a>
+      <a href="team.html">Our Team</a>
+      <a href="login.html">Admin Login</a>
+    </div>
+  </div>
+</footer>
+
+<script src="api.js"></script>
+<script>
+  function toggleDrawer() {
+    document.getElementById('drawerNav').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+  }
+
+  /* ── Image upload & preview ──────────── */
+  let selectedImageFile = null; // store the actual File object
+
+  function handleFiles(files) {
+    const list = Array.from(files).slice(0, 4);
+    if (list.length === 0) return;
+
+    selectedImageFile = list[0]; // keep for upload on save
+
+    // Preview main image
+    const reader0 = new FileReader();
+    reader0.onload = e => {
+      const prev = document.getElementById('mainPreview');
+      prev.src = e.target.result;
+      prev.style.display = 'block';
+      document.querySelector('.ap-upload-plus').style.display = 'none';
+      document.querySelector('.ap-upload-text').style.display = 'none';
+    };
+    reader0.readAsDataURL(list[0]);
+
+    // Thumbnails
+    list.forEach((file, i) => {
+      const r = new FileReader();
+      r.onload = e => {
+        const th = document.getElementById('th' + i);
+        if (th) { th.src = e.target.result; th.style.display = 'block'; }
+      };
+      r.readAsDataURL(file);
+    });
+  }
+
+  // Drag & drop
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = 'rgba(172,4,13,0.08)'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.style.background = '';
+    handleFiles(e.dataTransfer.files);
+  });
+
+  /* ── Save Confirmation Modal ──────────── */
+  function saveProduct() {
+    const name = document.getElementById('pName').value.trim();
+    if (!name) { alert('Please enter a product name.'); return; }
+    document.getElementById('saveModal').classList.add('open');
+    document.getElementById('confirmYesBtn').onclick = async function() {
+      // Show loading state
+      this.textContent = 'Saving...';
+      this.disabled = true;
+
+      try {
+        // 1) Upload image first (if one was picked)
+        let imgUrl = '';
+        if (selectedImageFile) {
+          imgUrl = await FleurAPI.uploadImage(selectedImageFile);
+        }
+
+        // 2) Build product entry
+        const raw = Number(document.getElementById('pPrice').value) || 0;
+        const entry = {
+          name:        name,
+          product_id:  document.getElementById('pId').value.trim()       || 'FL-XX-000',
+          category:    document.getElementById('pCategory').value         || 'Swimsuits',
+          price:       raw.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}),
+          color:       document.getElementById('pColor').value            || '—',
+          size:        document.getElementById('pSize').value             || 'M',
+          stock:       Number(document.getElementById('pStock').value)    || 0,
+          description: document.getElementById('pDesc').value.trim()      || '',
+          img:         imgUrl,
+        };
+
+        // 3) Save to MySQL
+        await FleurAPI.addProduct(entry);
+        closeModal();
+        window.location.href = 'product-management.html';
+      } catch (err) {
+        this.textContent = 'Yes';
+        this.disabled = false;
+        alert('Error saving product: ' + err.message);
+      }
+    };
+  }
+
+  function closeModal() {
+    document.getElementById('saveModal').classList.remove('open');
+  }
+
+  // Close on overlay click
+  document.getElementById('saveModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login – Fleur</title>
+  <meta name="description" content="Admin login for Fleur.">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montagu+Slab:opsz,wght@16..144,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .login-page {
+      min-height: 70vh;
+      background: #E9E2D7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 660px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .login-title {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #1a1a1a;
+      text-align: center;
+      margin: 0 0 40px;
+    }
+
+    .login-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #E9E2D7;
+      border: 1.5px solid #555;
+      padding: 20px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 18px;
+      color: #333;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 20px;
+    }
+    .login-input::placeholder { color: #aaa; }
+    .login-input:focus { border-color: #AC040D; }
+
+    .login-forgot {
+      text-align: right;
+      margin-bottom: 28px;
+    }
+    .login-forgot a {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 15px;
+      color: #1a1a1a;
+      text-decoration: underline;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .login-forgot a:hover { color: #AC040D; }
+
+    .login-btn {
+      display: block;
+      width: 260px;
+      margin: 0 auto 32px;
+      padding: 18px 0;
+      background: #AC040D;
+      color: #fff;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .login-btn:hover { background: #8a0309; }
+
+    .login-or {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .login-or-line {
+      flex: 1;
+      height: 1px;
+      background: #aaa;
+    }
+    .login-or-text {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #444;
+    }
+
+    .login-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: #1a1a1a;
+      transition: color 0.2s;
+    }
+    .login-back:hover { color: #AC040D; }
+
+    .login-back-icon {
+      width: 32px;
+      height: 32px;
+      border: 2px solid #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    .login-back:hover .login-back-icon { border-color: #AC040D; }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="homepage.html" class="logo-link navbar-logo">
+    <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
+  </a>
+  <div class="nav-icons">
+    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+      <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
+    </a>
+    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+      <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
+    </a>
+    <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
+      <img src="image/icon/bag.svg" alt="Bag" class="nav-icon-img">
+    </a>
+  </div>
+</header>
+
+<!-- Slide-in Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawerNav">
+  <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
+  <a href="homepage.html">Home</a>
+  <a href="product.html">Products</a>
+  <a href="#">About</a>
+  <a href="login.html">Login</a>
+</nav>
+
+<!-- LOGIN CONTENT -->
+<div class="login-page">
+  <div class="login-box">
+
+    <h1 class="login-title">ADMIN LOGIN</h1>
+
+    <input
+      type="text"
+      id="loginUsername"
+      class="login-input"
+      placeholder="Username"
+      autocomplete="username"
+    >
+
+    <input
+      type="password"
+      id="loginPassword"
+      class="login-input"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <div class="login-forgot">
+      <a href="#">Forget your password?</a>
+    </div>
+
+    <button class="login-btn" onclick="handleLogin()">LOGIN</button>
+
+    <div class="login-or">
+      <div class="login-or-line"></div>
+      <span class="login-or-text">OR</span>
+      <div class="login-or-line"></div>
+    </div>
+
+    <a href="homepage.html" class="login-back">
+      <span class="login-back-icon">←</span>
+      Back HOME page
+    </a>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <img src="image/icon/logo_footer.svg" alt="Fleur" class="footer-logo">
+      <p class="footer-copy">© 2026 Fleur</p>
+    </div>
+    <div class="footer-col">
+      <a href="product.html">All products</a>
+      <a href="#">Tops</a>
+      <a href="#">Bottoms</a>
+      <a href="#">Swimsuits</a>
+    </div>
+    <div class="footer-col">
+      <a href="#">Size Guide</a>
+      <a href="team.html">Our Team</a>
+      <a href="login.html">Admin Login</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleDrawer() {
+    document.getElementById('drawerNav').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+  }
+
+  function handleLogin() {
+    const user = document.getElementById('loginUsername').value.trim();
+    const pass = document.getElementById('loginPassword').value.trim();
+    if (!user || !pass) {
+      alert('Please enter username and password.');
+      return;
+    }
+    // Placeholder — connect to your backend here
+    alert('Login functionality coming soon!');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleLogin();
+  });
+</script>
+
+</body>
+</html>

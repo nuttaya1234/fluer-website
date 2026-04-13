@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Team – Fleur</title>
+  <meta name="description" content="Meet the team behind Fleur — created for the dreamers.">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montagu+Slab:opsz,wght@16..144,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── TEAM PAGE ─────────────────────────── */
+    .team-page {
+      background: #E9E2D7;
+      padding: 48px 48px 80px;
+      min-height: 70vh;
+    }
+
+    /* Brand intro */
+    .team-intro {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      margin-bottom: 52px;
+    }
+
+    .team-intro-text { flex: 1; }
+
+    .team-brand-name {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #AC040D;
+      letter-spacing: 2px;
+      margin: 0 0 14px;
+    }
+
+    .team-brand-desc {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: #444;
+      line-height: 1.8;
+      max-width: 540px;
+      margin: 0;
+    }
+
+    .team-flower {
+      width: 160px;
+      height: auto;
+      flex-shrink: 0;
+      margin-top: -8px;
+    }
+
+    /* Meet our team heading */
+    .team-heading {
+      margin-bottom: 8px;
+    }
+
+    .team-heading h2 {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 32px;
+      font-weight: 600;
+      font-style: italic;
+      color: #AC040D;
+      letter-spacing: 1px;
+      margin: 0 0 10px;
+    }
+
+    .team-heading p {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: #555;
+      line-height: 1.7;
+      margin: 0 0 36px;
+      max-width: 560px;
+    }
+
+    /* Team cards grid */
+    .team-grid {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .team-card {
+      flex: 1;
+      min-width: 180px;
+      max-width: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .team-card-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .team-card-name {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #222;
+      line-height: 1.5;
+      margin: 0 0 8px;
+    }
+
+    .team-card-id {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: #AC040D;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="homepage.html" class="logo-link navbar-logo">
+    <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
+  </a>
+  <div class="nav-icons">
+    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+      <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
+    </a>
+    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+      <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
+    </a>
+    <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
+      <img src="image/icon/bag.svg" alt="Bag" class="nav-icon-img">
+    </a>
+  </div>
+</header>
+
+<!-- Slide-in Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawerNav">
+  <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
+  <a href="homepage.html">Home</a>
+  <a href="product.html">Products</a>
+  <a href="team.html">Our Team</a>
+  <a href="login.html">Login</a>
+</nav>
+
+<!-- TEAM PAGE -->
+<div class="team-page">
+
+  <!-- Brand intro -->
+  <div class="team-intro">
+    <div class="team-intro-text">
+      <h1 class="team-brand-name">FLEUR</h1>
+      <p class="team-brand-desc">
+        was created for the dreamers — those who find beauty in sun-kissed
+        moments and effortless elegance. Inspired by the soul of the shore,
+        our brand celebrates natural confidence and soft femininity.
+      </p>
+    </div>
+    <img src="image/member/flower.png" alt="Flower" class="team-flower">
+  </div>
+
+  <!-- Meet our team -->
+  <div class="team-heading">
+    <h2>Meet our team</h2>
+    <p>Meet the minds behind the bloom. A creative studio dedicated to effortless elegance and sustainable craft.</p>
+  </div>
+
+  <!-- Team cards -->
+  <div class="team-grid">
+
+    <div class="team-card">
+      <img src="image/member/nuttaya.png" alt="Nuttaya Jirathanapaiboon" class="team-card-img">
+      <p class="team-card-name">Nuttaya<br>Jirathanapaiboon</p>
+      <p class="team-card-id">6788029</p>
+    </div>
+
+    <div class="team-card">
+      <img src="image/member/natnicha.png" alt="Natnicha Kittiphanthophas" class="team-card-img">
+      <p class="team-card-name">Natnicha<br>Kittiphanthophas</p>
+      <p class="team-card-id">6788046</p>
+    </div>
+
+    <div class="team-card">
+      <img src="image/member/chutima.png" alt="Chutima Namlakorn" class="team-card-img">
+      <p class="team-card-name">Chutima<br>Namlakorn</p>
+      <p class="team-card-id">6788067</p>
+    </div>
+
+    <div class="team-card">
+      <img src="image/member/pitchaphorn.png" alt="Phitchaphorn Limpamalaiphorn" class="team-card-img">
+      <p class="team-card-name">Phitchaphorn<br>Limpamalaiphorn</p>
+      <p class="team-card-id">67880198</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <img src="image/icon/logo_footer.svg" alt="Fleur" class="footer-logo">
+      <p class="footer-copy">© 2026 Fleur</p>
+    </div>
+    <div class="footer-col">
+      <a href="product.html">All products</a>
+      <a href="#">Tops</a>
+      <a href="#">Bottoms</a>
+      <a href="#">Swimsuits</a>
+    </div>
+    <div class="footer-col">
+      <a href="#">Size Guide</a>
+      <a href="team.html">Our Team</a>
+      <a href="login.html">Admin Login</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleDrawer() {
+    document.getElementById('drawerNav').classList.toggle('open');
+    document.getElementById('drawerOverlay').classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
