@@ -18,14 +18,14 @@
   <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
   </button>
-  <a href="homepage.html" class="logo-link navbar-logo">
+  <a href="/homepage" class="logo-link navbar-logo">
     <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
   </a>
   <div class="nav-icons">
-    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+    <a href="/search" class="nav-icon-btn" aria-label="Search">
       <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
     </a>
-    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+    <a href="/login" class="nav-icon-btn" aria-label="Login">
       <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
     </a>
     <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
@@ -38,10 +38,10 @@
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
 <nav class="drawer" id="drawerNav">
   <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
-  <a href="homepage.html">Home</a>
-  <a href="product.html">Products</a>
-  <a href="#">About</a>
-  <a href="#">Login</a>
+  <a href="/homepage">Home</a>
+  <a href="/product">Products</a>
+  <a href="/team">About</a>
+  <a href="/login">Login</a>
 </nav>
 
 <script>
@@ -56,9 +56,9 @@
 
   <!-- Breadcrumb -->
   <nav class="pd-breadcrumb">
-    <a href="homepage.html">Home</a>
+    <a href="/homepage">Home</a>
     <span>›</span>
-    <a href="product.html">Products</a>
+    <a href="/product">Products</a>
     <span>›</span>
     <span id="pd-breadcrumb-name">Product</span>
   </nav>
@@ -123,15 +123,81 @@
     </div>
     <div class="footer-col">
       <a href="#">Size Guide</a>
-      <a href="team.html">Our Team</a>
-      <a href="login.html">Admin Login</a>
+      <a href="/team">Our Team</a>
+      <a href="/login">Admin Login</a>
     </div>
   </div>
 </footer>
 
+<script src="api.js"></script>
 <script>
-/* ── Product database ─────────────────────────────── */
-const PRODUCTS = {
+async function loadProduct() {
+  const id = parseInt(new URLSearchParams(window.location.search).get('id'));
+  if (!id) { document.getElementById('pd-name').textContent = 'Product not found'; return; }
+
+  try {
+    const all = await FleurAPI.getProducts();
+    const p   = all.find(x => x.db_id === id);
+    if (!p) { document.getElementById('pd-name').textContent = 'Product not found'; return; }
+
+    // Meta & breadcrumb
+    document.title = p.name + ' – Fleur';
+    document.getElementById('pd-breadcrumb-name').textContent = p.name;
+    document.getElementById('pd-name').textContent  = p.name;
+    document.getElementById('pd-price').textContent = p.price + ' THB';
+    document.getElementById('pd-desc').textContent  = p.description || '—';
+
+    // Main image
+    const mainImg = document.getElementById('pd-main-img');
+    mainImg.src = p.img || '';
+    mainImg.alt = p.name;
+
+    // Thumbnail
+    const thumbsEl = document.getElementById('pd-thumbs');
+    if (p.img) {
+      const img = document.createElement('img');
+      img.src = p.img;
+      img.alt = p.name;
+      img.className = 'pd-thumb active';
+      img.onclick = () => { mainImg.src = p.img; };
+      thumbsEl.appendChild(img);
+    }
+
+    // Color
+    const colorsEl = document.getElementById('pd-colors');
+    if (p.color) {
+      const btn = document.createElement('button');
+      btn.className = 'pd-color-btn active';
+      btn.textContent = p.color;
+      btn.style.fontSize = '12px';
+      colorsEl.appendChild(btn);
+    }
+
+    // Sizes — show all standard sizes, highlight the product's size
+    const sizesEl = document.getElementById('pd-sizes');
+    ['XS','S','M','L'].forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'pd-size-btn' + (s === p.size ? ' active' : '');
+      btn.textContent = s;
+      btn.onclick = () => {
+        document.querySelectorAll('.pd-size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      };
+      sizesEl.appendChild(btn);
+    });
+
+  } catch (err) {
+    document.getElementById('pd-name').textContent = '⚠️ Could not load product';
+    console.error(err);
+  }
+}
+
+loadProduct();
+</script>
+
+</body>
+</html>
+
   betty: {
     name:   "Betty two-piece swimsuit",
     price:  "2,590.00 THB",

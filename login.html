@@ -141,14 +141,14 @@
   <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
   </button>
-  <a href="homepage.html" class="logo-link navbar-logo">
+  <a href="/homepage" class="logo-link navbar-logo">
     <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
   </a>
   <div class="nav-icons">
-    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+    <a href="/search" class="nav-icon-btn" aria-label="Search">
       <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
     </a>
-    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+    <a href="/login" class="nav-icon-btn" aria-label="Login">
       <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
     </a>
     <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
@@ -161,10 +161,10 @@
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
 <nav class="drawer" id="drawerNav">
   <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
-  <a href="homepage.html">Home</a>
-  <a href="product.html">Products</a>
-  <a href="#">About</a>
-  <a href="login.html">Login</a>
+  <a href="/homepage">Home</a>
+  <a href="/product">Products</a>
+  <a href="/team">About</a>
+  <a href="/login">Login</a>
 </nav>
 
 <!-- LOGIN CONTENT -->
@@ -201,7 +201,7 @@
       <div class="login-or-line"></div>
     </div>
 
-    <a href="homepage.html" class="login-back">
+    <a href="/homepage" class="login-back">
       <span class="login-back-icon">←</span>
       Back HOME page
     </a>
@@ -217,15 +217,15 @@
       <p class="footer-copy">© 2026 Fleur</p>
     </div>
     <div class="footer-col">
-      <a href="product.html">All products</a>
+      <a href="/product">All products</a>
       <a href="#">Tops</a>
       <a href="#">Bottoms</a>
       <a href="#">Swimsuits</a>
     </div>
     <div class="footer-col">
       <a href="#">Size Guide</a>
-      <a href="team.html">Our Team</a>
-      <a href="login.html">Admin Login</a>
+      <a href="/team">Our Team</a>
+      <a href="/login">Admin Login</a>
     </div>
   </div>
 </footer>
@@ -236,15 +236,40 @@
     document.getElementById('drawerOverlay').classList.toggle('open');
   }
 
-  function handleLogin() {
+  async function handleLogin() {
     const user = document.getElementById('loginUsername').value.trim();
     const pass = document.getElementById('loginPassword').value.trim();
     if (!user || !pass) {
       alert('Please enter username and password.');
       return;
     }
-    // Placeholder — connect to your backend here
-    alert('Login functionality coming soon!');
+
+    const btn = document.querySelector('.login-btn');
+    btn.textContent = 'Logging in...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('http://localhost:4000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user, password: pass })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        sessionStorage.setItem('adminName', data.admin.name);
+        window.location.href = 'product-management.html';
+      } else {
+        alert(data.error || 'Invalid username or password.');
+        btn.textContent = 'LOGIN';
+        btn.disabled = false;
+      }
+    } catch (err) {
+      alert('Could not connect to server. Make sure the backend is running.');
+      btn.textContent = 'LOGIN';
+      btn.disabled = false;
+    }
   }
 
   document.addEventListener('keydown', function(e) {

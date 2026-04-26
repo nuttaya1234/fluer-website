@@ -24,16 +24,16 @@
   </button>
 
   <!-- Center: Logo -->
-  <a href="homepage.html" class="logo-link navbar-logo">
+  <a href="/homepage" class="logo-link navbar-logo">
     <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
   </a>
 
   <!-- Right: Icons -->
   <div class="nav-icons">
-    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+    <a href="/search" class="nav-icon-btn" aria-label="Search">
       <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
     </a>
-    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+    <a href="/login" class="nav-icon-btn" aria-label="Login">
       <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
     </a>
     <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
@@ -46,10 +46,10 @@
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
 <nav class="drawer" id="drawerNav">
   <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
-  <a href="homepage.html">Home</a>
-  <a href="product.html">Products</a>
-  <a href="#">About</a>
-  <a href="#">Login</a>
+  <a href="/homepage">Home</a>
+  <a href="/product">Products</a>
+  <a href="/team">About</a>
+  <a href="/login">Login</a>
 </nav>
 
 <script>
@@ -62,46 +62,33 @@
 <!-- PRODUCTS PAGE -->
 <section class="products">
   <h2>Our Products</h2>
-
-  <div class="grid">
-
-    <a href="product-detail.html?id=betty" class="card">
-      <img src="image/allProduct&SearchPage/swim_betty_home.png" alt="Swim Betty">
-      <div class="card-text"><h3>Betty two-piece swimsuit</h3><p>2,590.00 THB</p></div>
-    </a>
-
-    <a href="product-detail.html?id=kittenny" class="card">
-      <img src="image/allProduct&SearchPage/swim_kittenny.png" alt="Swim Kittenny">
-      <div class="card-text"><h3>Kitteny one piece swimsuit</h3><p>1,990.00 THB</p></div>
-    </a>
-
-    <a href="product-detail.html?id=lolita" class="card">
-      <img src="image/allProduct&SearchPage/swim_lolita.png" alt="Swim Lolita">
-      <div class="card-text"><h3>Lolita Ruffle one piece swimsuit</h3><p>2,590.00 THB</p></div>
-    </a>
-
-    <a href="product-detail.html?id=balconette" class="card">
-      <img src="image/allProduct&SearchPage/swim_balconette.png" alt="Swim Balconette">
-      <div class="card-text"><h3>Balconette one piece swimsuit</h3><p>2,190.00 THB</p></div>
-    </a>
-
-    <a href="product-detail.html?id=lila" class="card">
-      <img src="image/allProduct&SearchPage/dress_lila.png" alt="Dress Lila">
-      <div class="card-text"><h3>Lila mini dress</h3><p>2,390.00 THB</p></div>
-    </a>
-
-    <a href="product-detail.html?id=camellia" class="card">
-      <img src="image/allProduct&SearchPage/top_camellia.png" alt="Top Camellia">
-      <div class="card-text"><h3>Camellia top</h3><p>1,590.00 THB</p></div>
-    </a>
-
-    <a href="product-detail.html?id=lily" class="card">
-      <img src="image/allProduct&SearchPage/sweater_lily.png" alt="Sweater Lily">
-      <div class="card-text"><h3>Lily floral sweater</h3><p>2,990.00 THB</p></div>
-    </a>
-
+  <div class="grid" id="productGrid">
+    <p style="padding:24px;color:#999;font-family:'Montagu Slab',serif">Loading products…</p>
   </div>
 </section>
+
+<script src="api.js"></script>
+<script>
+  async function loadProducts() {
+    const grid = document.getElementById('productGrid');
+    try {
+      const products = await FleurAPI.getProducts();
+      if (!products.length) { grid.innerHTML = '<p style="padding:24px">No products found.</p>'; return; }
+      grid.innerHTML = products.map(p => `
+        <a href="/product-detail?id=${p.db_id}" class="card">
+          <img src="${p.img}" alt="${p.name}">
+          <div class="card-text">
+            <h3>${p.name}</h3>
+            <p>${p.price} THB</p>
+          </div>
+        </a>
+      `).join('');
+    } catch (err) {
+      grid.innerHTML = '<p style="padding:24px;color:#AC040D">⚠️ Could not load products. Make sure the server is running.</p>';
+    }
+  }
+  loadProducts();
+</script>
 
 <!-- FOOTER -->
 <footer class="site-footer">
@@ -121,8 +108,8 @@
 
     <div class="footer-col">
       <a href="#">Size Guide</a>
-      <a href="team.html">Our Team</a>
-      <a href="login.html">Admin Login</a>
+      <a href="/team">Our Team</a>
+      <a href="/login">Admin Login</a>
     </div>
 
   </div>

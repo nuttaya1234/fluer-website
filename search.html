@@ -19,14 +19,14 @@
   <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
   </button>
-  <a href="homepage.html" class="logo-link navbar-logo">
+  <a href="/homepage" class="logo-link navbar-logo">
     <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
   </a>
   <div class="nav-icons">
-    <a href="search.html" class="nav-icon-btn" aria-label="Search">
+    <a href="/search" class="nav-icon-btn" aria-label="Search">
       <img src="image/icon/search.svg" alt="Search" class="nav-icon-img">
     </a>
-    <a href="login.html" class="nav-icon-btn" aria-label="Login">
+    <a href="/login" class="nav-icon-btn" aria-label="Login">
       <img src="image/icon/login.svg" alt="Login" class="nav-icon-img">
     </a>
     <a href="#" class="nav-icon-btn" aria-label="Shopping bag">
@@ -39,10 +39,10 @@
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
 <nav class="drawer" id="drawerNav">
   <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
-  <a href="homepage.html">Home</a>
-  <a href="product.html">Products</a>
-  <a href="#">About</a>
-  <a href="#">Login</a>
+  <a href="/homepage">Home</a>
+  <a href="/product">Products</a>
+  <a href="/team">About</a>
+  <a href="/login">Login</a>
 </nav>
 
 <script>
@@ -144,40 +144,43 @@
     </div>
     <div class="footer-col">
       <a href="#">Size Guide</a>
-      <a href="team.html">Our Team</a>
-      <a href="login.html">Admin Login</a>
+      <a href="/team">Our Team</a>
+      <a href="/login">Admin Login</a>
     </div>
   </div>
 </footer>
 
+<script src="api.js"></script>
 <script>
-  const products = [
-    { name: "Betty two-piece swimsuit",         price: "2,590.00 THB", category: "swimwear",  color: "purple", img: "image/home/our_product/swim_betty_home.png" },
-    { name: "Kitteny one piece swimsuit",        price: "1,990.00 THB", category: "swimwear",  color: "pink",   img: "image/home/our_product/swim_kittenny_home.png" },
-    { name: "Lolita Ruffle one piece swimsuit",  price: "2,590.00 THB", category: "swimwear",  color: "white",  img: "image/home/our_product/swim_lolita_home.png" },
-    { name: "Balconette one piece swimsuit",     price: "2,190.00 THB", category: "swimwear",  color: "pink",   img: "image/allProduct&SearchPage/swim_balconette.png" },
-    { name: "Lila mini dress",                   price: "2,390.00 THB", category: "dresses",   color: "white",  img: "image/allProduct&SearchPage/dress_lila.png" },
-    { name: "Camellia top",                      price: "1,590.00 THB", category: "tops",      color: "white",  img: "image/allProduct&SearchPage/top_camellia.png" },
-    { name: "Lily floral sweater",               price: "2,990.00 THB", category: "sweaters",  color: "beige",  img: "image/allProduct&SearchPage/sweater_lily.png" },
-  ];
+  let products = [];
 
+  // ── Render product cards ────────────────────────────────
   function renderCards(list) {
-    const grid = document.getElementById('resultsGrid');
+    const resultsDiv = document.getElementById('results');
+    const grid       = document.getElementById('resultsGrid');
+    const label      = document.getElementById('resultLabel');
+
+    resultsDiv.style.display = 'block';
+
     if (list.length === 0) {
-      grid.innerHTML = '<p class="no-results">No products found.</p>';
+      label.textContent = 'No products found.';
+      grid.innerHTML = '';
       return;
     }
+
+    label.textContent = `${list.length} product${list.length !== 1 ? 's' : ''} found`;
     grid.innerHTML = list.map(p => `
-      <div class="card">
+      <div class="card" onclick="window.location.href='/product-detail?id=${p.db_id}'" style="cursor:pointer">
         <img src="${p.img}" alt="${p.name}">
         <div class="card-text">
           <h3>${p.name}</h3>
-          <p>${p.price}</p>
+          <p>${p.price} THB</p>
         </div>
       </div>
     `).join('');
   }
 
+  // ── Dropdown helpers ────────────────────────────────────
   function toggleDropdown(id) {
     const dd = document.getElementById(id);
     const isOpen = dd.classList.contains('open');
@@ -189,37 +192,29 @@
     document.getElementById(labelId).textContent = display;
     document.getElementById(inputId).value = value;
     document.getElementById(dropdownId).classList.remove('open');
+    doSearch(); // auto-filter when category/size selected
   }
 
-  // Close dropdowns when clicking outside
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.custom-dropdown')) {
       document.querySelectorAll('.custom-dropdown').forEach(d => d.classList.remove('open'));
     }
   });
 
+  // ── Search / filter ─────────────────────────────────────
   function doSearch() {
-    const q       = document.getElementById('searchInput').value.trim();
-    const cat     = document.getElementById('categorySelect').value;
-    const catLabel = document.getElementById('categoryLabel').textContent;
-    const color   = document.getElementById('colorInput').value.trim();
+    const q     = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+    const cat   = (document.getElementById('categorySelect').value || '').toLowerCase();
+    const size  = (document.getElementById('sizeSelect').value || '').toLowerCase();
+    const color = (document.getElementById('colorInput').value || '').trim().toLowerCase();
 
     const filtered = products.filter(p =>
-      (!q     || p.name.toLowerCase().includes(q.toLowerCase())) &&
-      (!cat   || p.category === cat) &&
-      (!color || p.color.toLowerCase().includes(color.toLowerCase()))
+      (!q     || (p.name || '').toLowerCase().includes(q)) &&
+      (!cat   || (p.category || '').toLowerCase().includes(cat)) &&
+      (!size  || (p.size || '').toLowerCase() === size) &&
+      (!color || (p.color || '').toLowerCase().includes(color))
     );
 
-    // Build label text
-    const parts = [];
-    if (q)   parts.push(`"${q}"`);
-    if (cat) parts.push(catLabel);
-    if (color) parts.push(color);
-    const labelText = parts.length ? parts.join(', ') : 'all products';
-    document.getElementById('resultLabel').textContent = `Search result for ${labelText}`;
-
-    // Show results section
-    document.getElementById('results').style.display = 'block';
     renderCards(filtered);
   }
 
@@ -230,11 +225,33 @@
     document.getElementById('sizeSelect').value = '';
     document.getElementById('sizeLabel').textContent = 'Size';
     document.getElementById('colorInput').value = '';
-    document.getElementById('results').style.display = 'none';
-    document.getElementById('resultsGrid').innerHTML = '';
-    document.getElementById('resultLabel').textContent = '';
+    renderCards(products); // show all
   }
+
+  // ── Load products on page load and show all ─────────────
+  async function initSearch() {
+    const btn = document.querySelector('.search-btn');
+    if (btn) { btn.textContent = 'Loading…'; btn.disabled = true; }
+    try {
+      products = await FleurAPI.getProducts();
+      renderCards(products); // show all products immediately
+    } catch (e) {
+      document.getElementById('resultLabel').textContent = '⚠️ Could not connect to server.';
+      document.getElementById('results').style.display = 'block';
+    } finally {
+      if (btn) { btn.textContent = 'Search'; btn.disabled = false; }
+    }
+  }
+
+  // Allow Enter key to search
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  initSearch();
 </script>
+
+
 
 </body>
 </html>

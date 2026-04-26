@@ -74,81 +74,87 @@
       gap: 20px;
     }
 
-    .ap-upload-zone {
+    /* Drive image preview box */
+    .ap-img-preview-box {
       width: 100%;
       aspect-ratio: 1;
       border: 2px dashed #AC040D;
       border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f1ec;
+      position: relative;
+    }
+    .ap-img-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+    .ap-img-placeholder {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.2s;
-    }
-    .ap-upload-zone:hover { background: rgba(172,4,13,0.04); }
-
-    .ap-upload-zone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-    .ap-upload-plus {
-      width: 36px;
-      height: 36px;
-      border: 2px solid #AC040D;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      gap: 8px;
       color: #AC040D;
-      font-size: 22px;
-      font-weight: 300;
+      opacity: 0.55;
     }
-
-    .ap-upload-text {
+    .ap-img-placeholder svg { width: 40px; height: 40px; }
+    .ap-img-placeholder span {
       font-family: 'Montagu Slab', Georgia, serif;
-      font-size: 12px;
-      color: #AC040D;
+      font-size: 11px;
       text-align: center;
       line-height: 1.4;
     }
 
-    .ap-upload-preview {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      position: absolute;
-      inset: 0;
-    }
-
-    .ap-preview-label {
+    /* Drive link input */
+    .ap-drive-label {
       font-family: 'Montagu Slab', Georgia, serif;
       font-size: 13px;
       font-weight: 600;
       color: #333;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-
-    .ap-preview-strip { display: flex; gap: 8px; }
-
-    .ap-preview-thumb {
-      width: 52px;
-      height: 52px;
-      background: #d4ccc4;
+    .ap-drive-input-wrap {
+      display: flex;
+      gap: 6px;
+    }
+    .ap-drive-input {
+      flex: 1;
+      background: #E9E2D7;
+      border: 1.5px solid #AC040D;
       border-radius: 4px;
-      overflow: hidden;
-      flex-shrink: 0;
+      padding: 8px 10px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 12px;
+      color: #333;
+      outline: none;
+      transition: border-color 0.2s;
     }
-    .ap-preview-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .ap-drive-input:focus { border-color: #7a1118; }
+    .ap-drive-input::placeholder { color: #bbb; }
+    .ap-drive-preview-btn {
+      padding: 8px 12px;
+      background: #AC040D;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .ap-drive-preview-btn:hover { background: #8a0309; }
+    .ap-drive-hint {
+      font-family: 'Montagu Slab', Georgia, serif;
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+      line-height: 1.4;
     }
 
     /* ── Right ─────────────────────────── */
@@ -326,7 +332,7 @@
   <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" onclick="toggleDrawer()">
     <span></span><span></span><span></span>
   </button>
-  <a href="homepage.html" class="logo-link navbar-logo">
+  <a href="/homepage" class="logo-link navbar-logo">
     <img src="image/icon/logo_header.svg" alt="FLEUR logo" class="logo" width="180" height="40">
   </a>
   <div class="nav-icons">
@@ -339,19 +345,19 @@
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
 <nav class="drawer" id="drawerNav">
   <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close">✕</button>
-  <a href="homepage.html">Home</a>
-  <a href="product.html">Products</a>
-  <a href="#">About</a>
-  <a href="login.html">Login</a>
+  <a href="/homepage">Home</a>
+  <a href="/product">Products</a>
+  <a href="/team">About</a>
+  <a href="/login">Login</a>
 </nav>
 
 <!-- PAGE CONTENT -->
 <div class="ap-page">
 
   <nav class="ap-breadcrumb">
-    <a href="login.html">Admin</a>
+    <a href="/login">Admin</a>
     <span>›</span>
-    <a href="product-management.html">Product Management</a>
+    <a href="/product-management">Product Management</a>
     <span>›</span>
     <span id="breadcrumbName">Edit Product</span>
   </nav>
@@ -365,23 +371,29 @@
 
     <div class="ap-card-body">
 
-      <!-- LEFT: image upload -->
+      <!-- LEFT: drive link + preview -->
       <div class="ap-left">
-        <div class="ap-upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-          <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFiles(this.files)">
-          <div class="ap-upload-plus" id="uploadPlus">+</div>
-          <p class="ap-upload-text" id="uploadText">Drag or click to upload<br>photo</p>
-          <img class="ap-upload-preview" id="mainPreview" alt="Preview" style="display:none">
+        <!-- Image preview box -->
+        <div class="ap-img-preview-box" id="imgPreviewBox">
+          <img id="mainPreview" alt="Preview">
+          <div class="ap-img-placeholder" id="imgPlaceholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            <span>Paste a Google Drive<br>link below</span>
+          </div>
         </div>
 
+        <!-- Drive link input -->
         <div>
-          <p class="ap-preview-label">Image Preview</p>
-          <div class="ap-preview-strip" id="previewStrip">
-            <div class="ap-preview-thumb"><img id="th0" alt="" style="display:none"></div>
-            <div class="ap-preview-thumb"><img id="th1" alt="" style="display:none"></div>
-            <div class="ap-preview-thumb"><img id="th2" alt="" style="display:none"></div>
-            <div class="ap-preview-thumb"><img id="th3" alt="" style="display:none"></div>
+          <p class="ap-drive-label">Image Link (Google Drive)</p>
+          <div class="ap-drive-input-wrap">
+            <input type="text" class="ap-drive-input" id="driveLink" placeholder="Paste Drive share link…">
+            <button class="ap-drive-preview-btn" onclick="previewDriveLink()">Preview</button>
           </div>
+          <p class="ap-drive-hint">Share the file → Copy link → Paste here</p>
         </div>
       </div>
 
@@ -452,7 +464,7 @@
         </div>
 
         <div class="ap-actions">
-          <button class="ap-cancel-btn" onclick="window.location.href='product-management.html'">Cancel</button>
+          <button class="ap-cancel-btn" onclick="window.location.href='/product-management'">Cancel</button>
           <button class="ap-save-btn" onclick="saveProduct()">Save</button>
         </div>
 
@@ -481,15 +493,15 @@
       <p class="footer-copy">© 2026 Fleur</p>
     </div>
     <div class="footer-col">
-      <a href="product.html">All products</a>
+      <a href="/product">All products</a>
       <a href="#">Tops</a>
       <a href="#">Bottoms</a>
       <a href="#">Swimsuits</a>
     </div>
     <div class="footer-col">
       <a href="#">Size Guide</a>
-      <a href="team.html">Our Team</a>
-      <a href="login.html">Admin Login</a>
+      <a href="/team">Our Team</a>
+      <a href="/login">Admin Login</a>
     </div>
   </div>
 </footer>
@@ -501,15 +513,58 @@
     document.getElementById('drawerOverlay').classList.toggle('open');
   }
 
+  /* ── Google Drive URL → thumbnail embed URL ── */
+  function driveToDirectUrl(url) {
+    if (!url) return '';
+    url = url.trim();
+
+    if (url.includes('drive.google.com/thumbnail')) return url;
+
+    if (url.includes('drive.google.com/uc')) {
+      const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (idMatch) return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w400`;
+    }
+
+    const fileMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (fileMatch) return `https://drive.google.com/thumbnail?id=${fileMatch[1]}&sz=w400`;
+
+    const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (idMatch) return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w400`;
+
+    return url;
+  }
+
+  /* ── Preview Google Drive link ──────────── */
+  function previewDriveLink() {
+    const raw = document.getElementById('driveLink').value.trim();
+    if (!raw) { alert('Please paste a Google Drive link first.'); return; }
+    const direct = driveToDirectUrl(raw);
+    const prev = document.getElementById('mainPreview');
+    prev.src = direct;
+    prev.style.display = 'block';
+    document.getElementById('imgPlaceholder').style.display = 'none';
+    prev.onerror = () => {
+      prev.style.display = 'none';
+      document.getElementById('imgPlaceholder').style.display = 'flex';
+      alert('Could not load image. Make sure the file is shared as "Anyone with the link".');
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('driveLink').addEventListener('keydown', e => {
+      if (e.key === 'Enter') previewDriveLink();
+    });
+  });
+
   /* ── Load product from MySQL by ?id= ───── */
-  const params   = new URLSearchParams(window.location.search);
-  const rowId    = parseInt(params.get('id'));
+  const params = new URLSearchParams(window.location.search);
+  const rowId  = parseInt(params.get('id'));
 
   async function loadProduct() {
     if (isNaN(rowId)) return;
     try {
       const all = await FleurAPI.getProducts();
-      const p   = all.find(x => x.id === rowId);
+      const p   = all.find(x => x.db_id === rowId);
       if (!p) return;
 
       document.getElementById('breadcrumbName').textContent = p.name;
@@ -523,17 +578,13 @@
       document.getElementById('pDesc').value     = p.description || '';
 
       if (p.img) {
+        // Populate drive link input with existing URL
+        document.getElementById('driveLink').value = p.img;
+        // Show preview
         const prev = document.getElementById('mainPreview');
         prev.src = p.img;
-        prev.setAttribute('data-existing-src', p.img); // preserve for save
         prev.style.display = 'block';
-        document.getElementById('uploadPlus').style.display = 'none';
-        document.getElementById('uploadText').style.display = 'none';
-        ['th0','th1'].forEach(id => {
-          const th = document.getElementById(id);
-          th.src = p.img;
-          th.style.display = 'block';
-        });
+        document.getElementById('imgPlaceholder').style.display = 'none';
       }
     } catch (err) {
       alert('Could not load product: ' + err.message);
@@ -541,44 +592,6 @@
   }
 
   loadProduct();
-
-  /* ── Image upload & preview ──────────── */
-  let selectedImageFile = null; // null = keep existing image
-
-  function handleFiles(files) {
-    const list = Array.from(files).slice(0, 4);
-    if (!list.length) return;
-
-    selectedImageFile = list[0]; // store for upload on save
-
-    const r0 = new FileReader();
-    r0.onload = e => {
-      const prev = document.getElementById('mainPreview');
-      prev.src = e.target.result;
-      prev.style.display = 'block';
-      document.getElementById('uploadPlus').style.display = 'none';
-      document.getElementById('uploadText').style.display = 'none';
-    };
-    r0.readAsDataURL(list[0]);
-
-    list.forEach((file, i) => {
-      const r = new FileReader();
-      r.onload = e => {
-        const th = document.getElementById('th' + i);
-        if (th) { th.src = e.target.result; th.style.display = 'block'; }
-      };
-      r.readAsDataURL(file);
-    });
-  }
-
-  const zone = document.getElementById('uploadZone');
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = 'rgba(172,4,13,0.08)'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault();
-    zone.style.background = '';
-    handleFiles(e.dataTransfer.files);
-  });
 
   /* ── Save Confirmation Modal ──────────── */
   function saveProduct() {
@@ -590,27 +603,23 @@
       this.disabled = true;
 
       try {
-        // 1) Upload new image if one was selected, else keep existing
-        let imgUrl = document.getElementById('mainPreview').getAttribute('data-existing-src') || '';
-        if (selectedImageFile) {
-          imgUrl = await FleurAPI.uploadImage(selectedImageFile);
-        }
+        // Use the converted Drive direct URL as img
+        const raw    = document.getElementById('driveLink').value.trim();
+        const imgUrl = driveToDirectUrl(raw);
 
-        // 2) Build updated entry
-        const raw = Number(String(document.getElementById('pPrice').value).replace(/,/g,'')) || 0;
+        const price = Number(String(document.getElementById('pPrice').value).replace(/,/g,'')) || 0;
         const entry = {
           name:        name,
-          product_id:  document.getElementById('pId').value.trim()       || 'FL-XX-000',
-          category:    document.getElementById('pCategory').value         || 'Swimsuits',
-          price:       raw.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}),
-          color:       document.getElementById('pColor').value            || '—',
-          size:        document.getElementById('pSize').value             || 'M',
-          stock:       Number(document.getElementById('pStock').value)    || 0,
-          description: document.getElementById('pDesc').value.trim()      || '',
+          product_id:  document.getElementById('pId').value.trim()        || 'FL-XX-000',
+          category:    document.getElementById('pCategory').value          || 'Swimsuits',
+          price:       price.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}),
+          color:       document.getElementById('pColor').value             || '—',
+          size:        document.getElementById('pSize').value              || 'M',
+          stock:       Number(document.getElementById('pStock').value)     || 0,
+          description: document.getElementById('pDesc').value.trim()       || '',
           img:         imgUrl,
         };
 
-        // 3) Save to MySQL
         await FleurAPI.updateProduct(rowId, entry);
         closeModal();
         window.location.href = 'product-management.html';
@@ -626,7 +635,6 @@
     document.getElementById('saveModal').classList.remove('open');
   }
 
-  // Close on overlay click
   document.getElementById('saveModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
